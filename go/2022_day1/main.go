@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
+	var calsInt []int
 	cals, err := readInput()
 	if err != nil {
 		fmt.Println("input error")
 		return
 	}
-
-	var calsInt []int
 
 	j := 0
 	buffer := 0
@@ -24,7 +24,6 @@ func main() {
 			if err != nil {
 				fmt.Println("err converting str")
 			}
-
 			buffer += calVal
 		} else if v == "" {
 			calsInt = append(calsInt, buffer)
@@ -33,17 +32,30 @@ func main() {
 		}
 	}
 
-
-	maxVal, maxIndex := 0, 0
+	calsMap := make(map[int]int)
 	for i, v := range calsInt {
-		if v > maxVal {
-			// convert from zero index
-			maxIndex = i + 1
-			maxVal = v
-		}
+		calsMap[i] = v
+	}
+	// get top 3 elves
+	top := sortMap(calsMap)
+	total := 0
+	for _, v := range top {
+		total += calsMap[v]
+	}
+	fmt.Println("total calories held by the top 3 elves are: ", total)
+}
+
+func sortMap(m map[int]int) []int {
+	keys := make([]int, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
 	}
 
-	fmt.Printf("The elf with the most calories held is elf %v with %v calories\n", maxIndex, maxVal)
+	sort.SliceStable(keys, func(i, j int) bool {
+		return m[keys[i]] > m[keys[j]]
+	})
+
+	return keys[:3]
 }
 
 // Function to read and format input data from text file
