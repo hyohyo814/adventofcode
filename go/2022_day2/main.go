@@ -13,46 +13,56 @@ func main() {
 	// you: X rock, Y paper, Z scissors
 
 	// record keeping map for players
-	record := make(map[int]int, 2)
+	record := make(map[int32]int32, 2)
 	// initialize player points
 	record[0] = 0
 	record[1] = 0
 
 	// guide map for points
 	// rock +1, paper +2, scissors +3
-	guide := map[string]map[string][]int{
+	guide := map[string]map[string][]int32{
 		"A": {
-			"X": []int{4, 4},
-			"Y": []int{1, 8},
-			"Z": []int{7, 3},
+			"X": []int32{4, 4},
+			"Y": []int32{1, 8},
+			"Z": []int32{7, 3},
 		},
 		"B": {
-			"X": []int{8, 1},
-			"Y": []int{5, 5},
-			"Z": []int{2, 9},
+			"X": []int32{8, 1},
+			"Y": []int32{5, 5},
+			"Z": []int32{2, 9},
 		},
 		"C": {
-			"X": []int{3, 7},
-			"Y": []int{9, 2},
-			"Z": []int{6, 6},
+			"X": []int32{3, 7},
+			"Y": []int32{9, 2},
+			"Z": []int32{6, 6},
 		},
 	}
 	fmt.Println(guide)
 
 	input, err := readInput()
 	if err != nil {
-		fmt.Errorf("error reading input")
+		fmt.Println("error reading input")
 		return
 	}
 
 	for _, v := range input {
 		_, ok := guide[v[0]]
 		if !ok {
-			fmt.Errorf("invalid input")
+			fmt.Println("invalid input found")
 			return
+		} else {
+			mm, ok := guide[v[0]][v[1]]
+			if !ok {
+				fmt.Println("invalid input found")
+				return
+			} else {
+				record[0] += mm[0]
+				record[1] += mm[1]
+			}
 		}
-
 	}
+
+	fmt.Printf("Final score: Elf {%v}, You {%v}\n", record[0], record[1])
 }
 
 // Function to read and format input data from text file
@@ -75,4 +85,3 @@ func readInput() ([][]string, error) {
 
 	return formattedPairs, nil
 }
-
