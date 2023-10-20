@@ -49,7 +49,7 @@ func badges(input *[]string, priority *map[rune]int) (int, error){
 	i := 0
 	j := i + 3
 	for j < len(*input) {
-
+		
 	}
 
 	return result, nil
