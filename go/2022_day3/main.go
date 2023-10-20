@@ -10,9 +10,11 @@ func main() {
 	/*
 		items - 1 of 2 compartments
 		A given rucksack always has the same number of items in each of its two comps
+
+		part 2
+		groups of 3 - common type between 3
 	*/
 
-	result := 0
 	priority := priorityCreate()
 
 	input, err := readInput()
@@ -21,7 +23,46 @@ func main() {
 		return
 	}
 
-	for i, v := range input {
+	part1res, err := rearrangment(&input, &priority)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("The sum of priorities: %v\n", part1res)
+
+	/*
+		part 2
+		left 0, right left+3
+		iterate while right < len(input)
+		
+	*/
+
+}
+
+func badges(input *[]string, priority *map[rune]int) (int, error){
+	result := 0
+
+	if *input == nil {
+		return 1, fmt.Errorf("error with part 1 input")
+	}
+
+	i := 0
+	j := i + 3
+	for j < len(*input) {
+
+	}
+
+	return result, nil
+}
+
+func rearrangment(input *[]string, priority *map[rune]int) (int, error){
+	result := 0
+
+	if *input == nil {
+		return 1, fmt.Errorf("error with part 1 input")
+	}
+
+	for _, v := range *input {
 		strarr := strings.Split(v, "")
 		left := strarr[:len(strarr)/2]
 		right := strarr[len(strarr)/2:]
@@ -47,13 +88,12 @@ func main() {
 				continue
 			}
 		}
-		fmt.Printf("The type found in both compartments for rucksack %v is: %v\n", i, target)
 		lookup := []rune(target)
-		if mm, ok := priority[lookup[0]]; ok {
+		if mm, ok := (*priority)[lookup[0]]; ok {
 			result += mm
 		}
 	}
-	fmt.Printf("The sum of priorities: %v\n", result)
+	return result, nil
 }
 
 // Function to read and format input data from text file
