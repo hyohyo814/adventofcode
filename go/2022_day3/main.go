@@ -39,6 +39,7 @@ func main() {
 
 	badges(&input, &priority)
 
+	fmt.Println(len(input))
 }
 
 func badges(input *[]string, priority *map[rune]int) (int, error){
@@ -49,17 +50,17 @@ func badges(input *[]string, priority *map[rune]int) (int, error){
 	}
 
 	l := 0
-	r := 3
+	r := 2
 	count := 0
-	for r < 16 {
-		for i := l; i < r; i++ {
+	for r < len(*input) {
+		for i := l; i <= r; i++ {
 			fmt.Println("==============")
 			fmt.Printf("group %v\n", count)
 			fmt.Printf("item %v: %v\n",i, (*input)[i])
 			fmt.Println("==============")
 		}
 		count++
-		l = r
+		l = r + 1
 		r += 3
 	}
 
