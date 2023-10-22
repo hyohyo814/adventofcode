@@ -34,15 +34,24 @@ func main() {
 		part 2
 		left 0, right left+3
 		iterate while right < len(input)
-		
+
 	*/
 
-	badges(&input, &priority)
+	testcase := []string{
+		`vJrwpWtwJgWrhcsFMMfFFhFp`,
+		`jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL`,
+		`PmmdzqPrVvPwwTWBwg`,
+		`wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn`,
+		`ttgJtRGJQctTZtZT`,
+		`CrZsJsPPZsGzwwsLwLmpwMDw`,
+	}
+
+	badges(&testcase, &priority)
 
 	fmt.Println(len(input))
 }
 
-func badges(input *[]string, priority *map[rune]int) (int, error){
+func badges(input *[]string, priority *map[rune]int) (int, error) {
 	result := 0
 
 	if *input == nil {
@@ -51,15 +60,36 @@ func badges(input *[]string, priority *map[rune]int) (int, error){
 
 	l := 0
 	r := 2
-	count := 0
 	for r < len(*input) {
-		for i := l; i <= r; i++ {
-			fmt.Println("==============")
-			fmt.Printf("group %v\n", count)
-			fmt.Printf("item %v: %v\n",i, (*input)[i])
-			fmt.Println("==============")
+		m := make(map[string]int)
+		partition := (*input)[l:r+1]
+		fmt.Println("===============")
+		fmt.Printf("partition: %v\n", partition)
+		for i, v := range partition {
+			strarr := strings.Split(v, "")
+			for _, l := range strarr {
+				if i == 0 {
+					_, ok := m[l]
+
+					if !ok {
+						fmt.Printf("adding new key %v to map\n", l)
+						m[l] = 0
+					}
+				} else if i != 0 {
+					_, ok := m[l]	
+					if ok {
+						fmt.Printf("duplicate found: %v\n", l)
+						m[l]++
+					}
+				}
+
+			}
 		}
-		count++
+
+		fmt.Println(m)
+		res := findMax(m)
+		fmt.Printf("common val is %v\n", res)
+
 		l = r + 1
 		r += 3
 	}
@@ -67,7 +97,25 @@ func badges(input *[]string, priority *map[rune]int) (int, error){
 	return result, nil
 }
 
-func rearrangment(input *[]string, priority *map[rune]int) (int, error){
+func findMax(m map[string]int) string {
+	max := 0
+	for _, value := range m {
+		if value > max {
+			max = value
+		}
+	}
+
+	retVal := ""
+	for key, value := range m {
+		if value == max {
+			retVal = key
+		}
+	}
+
+	return retVal
+}
+
+func rearrangment(input *[]string, priority *map[rune]int) (int, error) {
 	result := 0
 
 	if *input == nil {
