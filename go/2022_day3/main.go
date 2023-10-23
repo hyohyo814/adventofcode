@@ -37,18 +37,14 @@ func main() {
 
 	*/
 
-	testcase := []string{
-		`vJrwpWtwJgWrhcsFMMfFFhFp`,
-		`jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL`,
-		`PmmdzqPrVvPwwTWBwg`,
-		`wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn`,
-		`ttgJtRGJQctTZtZT`,
-		`CrZsJsPPZsGzwwsLwLmpwMDw`,
+
+	result2, err := badges(&input, &priority)
+	if err != nil {
+		fmt.Println("error reading input")
+		return	
 	}
 
-	badges(&testcase, &priority)
-
-	fmt.Println(len(input))
+	fmt.Println(result2)
 }
 
 func badges(input *[]string, priority *map[rune]int) (int, error) {
@@ -68,27 +64,25 @@ func badges(input *[]string, priority *map[rune]int) (int, error) {
 		for i, v := range partition {
 			strarr := strings.Split(v, "")
 			for _, l := range strarr {
-				if i == 0 {
-					_, ok := m[l]
+				mm, ok := m[l]
 
-					if !ok {
-						fmt.Printf("adding new key %v to map\n", l)
-						m[l] = 0
-					}
-				} else if i != 0 {
-					_, ok := m[l]	
-					if ok {
-						fmt.Printf("duplicate found: %v\n", l)
-						m[l]++
-					}
+				if i == 0 && !ok {
+					m[l] = 0
+					continue
+				} else if ok && mm >= i - 1 {
+					m[l] = i
+					continue
 				}
-
 			}
 		}
 
 		fmt.Println(m)
 		res := findMax(m)
 		fmt.Printf("common val is %v\n", res)
+		lookup := []rune(res)
+		if mm, ok := (*priority)[lookup[0]]; ok {
+			result += mm
+		}
 
 		l = r + 1
 		r += 3
